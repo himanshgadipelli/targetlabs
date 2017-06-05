@@ -3,6 +3,7 @@ package com.himansh.targetlabs.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,9 +31,12 @@ public class RestFileController {
 
     private final Logger logger = LoggerFactory.getLogger(RestFileController.class);
 
-    @PostMapping("/api/upload")
-    public ResponseEntity<?> uploadFileMulti(
+    @PostMapping(name = "/api/upload",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> uploadFile(
             @RequestParam("uploadFile") MultipartFile[] uploadfile) {
+
+        BasicFileAttributes attr = null;
 
         logger.debug("File uploaded!");
 
@@ -43,17 +48,23 @@ public class RestFileController {
         }
 
         try {
-
             saveUploadedFiles(Arrays.asList(uploadfile));
+            Path pathRetrieve = Paths.get(UPLOADED_FOLDER + uploadedFileName);
+            attr = Files.readAttributes(pathRetrieve, BasicFileAttributes.class);
 
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity("Successfully uploaded - "
-                + uploadedFileName, HttpStatus.OK);
+        return new ResponseEntity("Successfully uploaded - " + uploadedFileName
+                + "\tcreationTime: " + attr.creationTime().toString()
+                + "\tlastAccessTime: " + attr.lastAccessTime().toString()
+                + "\tlastModifiedTime: " + attr.lastModifiedTime().toString()
+                + "\tisDirectory: " + attr.isDirectory()
+                + "\tisRegularFile: " + attr.isRegularFile()
+                + "\tisSymbolicLink: " + attr.isSymbolicLink()
+                + "\tsize: " + attr.size() + " Bytes", HttpStatus.OK);
     }
-
 
     /*Save files*/
     private void saveUploadedFiles(List<MultipartFile> files) throws IOException {
