@@ -21,8 +21,6 @@ function fire_ajax_submit() {
 
     var data = new FormData(form);
 
-    data.append("CustomField", "This is some extra data, testing");
-
     $("#btnSubmit").prop("disabled", true);
 
     $.ajax({

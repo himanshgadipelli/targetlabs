@@ -45,6 +45,6 @@
 		<level name="Maven: org.springframework.boot:spring-boot:1.4.3.RELEASE" value="project"/>
 		<level name="Maven: org.springframework:spring-context:4.3.5.RELEASE" value="project"/>
 		<level name="Maven: org.springframework.boot:spring-boot-autoconfigure:1.4.3.RELEASE" value="project"/>
-		<level name="Maven: org.webjars:jquery:2.2.4" value="project"/>
+		<level name="Maven: org.webjars:jquery:3.2.1" value="project"/>
 	</levels>
 </component>

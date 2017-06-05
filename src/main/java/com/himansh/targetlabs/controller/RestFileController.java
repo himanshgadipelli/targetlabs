@@ -34,14 +34,14 @@ public class RestFileController {
     @PostMapping(name = "/api/upload",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> uploadFile(
-            @RequestParam("uploadFile") MultipartFile[] uploadfile) {
+            @RequestParam("uploadFile") MultipartFile[] uploadFile) {
 
         BasicFileAttributes attr = null;
         Path pathRetrieve = null;
 
 
 
-        String uploadedFileName = Arrays.stream(uploadfile).map(x -> x.getOriginalFilename())
+        String uploadedFileName = Arrays.stream(uploadFile).map(x -> x.getOriginalFilename())
                 .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(" , "));
 
         if (StringUtils.isEmpty(uploadedFileName)) {
@@ -49,7 +49,7 @@ public class RestFileController {
         }
 
         try {
-            saveUploadedFiles(Arrays.asList(uploadfile));
+            saveUploadedFiles(Arrays.asList(uploadFile));
             pathRetrieve = Paths.get(UPLOADED_FOLDER + uploadedFileName);
             attr = Files.readAttributes(pathRetrieve, BasicFileAttributes.class);
 
@@ -57,8 +57,8 @@ public class RestFileController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity("Successfully uploaded - " + uploadedFileName
-                + "\tin " + UPLOADED_FOLDER
+        return new ResponseEntity("\nSuccessfully uploaded - " + uploadedFileName
+                + "\tto " + UPLOADED_FOLDER
                 + "\tcreationTime: " + attr.creationTime().toString()
                 + "\tlastAccessTime: " + attr.lastAccessTime().toString()
                 + "\tlastModifiedTime: " + attr.lastModifiedTime().toString()
@@ -81,7 +81,6 @@ public class RestFileController {
             if (file.isEmpty()) {
                 continue;
             }
-
             byte[] bytes = file.getBytes();
             Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
             Files.write(path, bytes);
