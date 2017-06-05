@@ -27,6 +27,7 @@ function fire_ajax_submit() {
 
     $.ajax({
         type: "POST",
+        enctype: 'multipart/form-data',
         url: "/api/upload",
         data: data,
         processData: false,
