@@ -33,8 +33,7 @@ public class UploadModel {
     @Override
     public String toString() {
         return "UploadModel{" +
-                "extraField='" + extraField + '\'' +
-                ", files=" + Arrays.toString(files) +
+                "File=" + Arrays.toString(files) +
                 '}';
     }
 }

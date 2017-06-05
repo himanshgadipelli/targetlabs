@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @RestController
 public class RestFileController {
 
-    private static String UPLOADED_FOLDER = "D://Storage//";
+    private static String UPLOADED_FOLDER = "C://Storage//";
 
     private final Logger logger = LoggerFactory.getLogger(RestFileController.class);
 
@@ -38,8 +38,6 @@ public class RestFileController {
 
         BasicFileAttributes attr = null;
         Path pathRetrieve = null;
-
-
 
         String uploadedFileName = Arrays.stream(uploadFile).map(x -> x.getOriginalFilename())
                 .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(" , "));
