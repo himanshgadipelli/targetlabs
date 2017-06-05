@@ -43,7 +43,7 @@ public class RestFileController {
                 .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(" , "));
 
         if (StringUtils.isEmpty(uploadedFileName)) {
-            return new ResponseEntity("please select a file!", HttpStatus.OK);
+            return new ResponseEntity<>("please select a file!", HttpStatus.OK);
         }
 
         try {
@@ -55,7 +55,7 @@ public class RestFileController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity("\nSuccessfully uploaded - " + uploadedFileName
+        return new ResponseEntity<>("\nSuccessfully uploaded - " + uploadedFileName
                 + "\tto " + UPLOADED_FOLDER
                 + "\tcreationTime: " + attr.creationTime().toString()
                 + "\tlastAccessTime: " + attr.lastAccessTime().toString()
