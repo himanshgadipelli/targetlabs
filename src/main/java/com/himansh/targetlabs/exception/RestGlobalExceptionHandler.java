@@ -24,7 +24,6 @@ public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus status = getStatus(request);
 
         return new ResponseEntity(new CustomError(status.toString(), "Attachment size exceeds the allowable limit! (10MB)"), status);
-
     }
 
     private HttpStatus getStatus(HttpServletRequest request) {
