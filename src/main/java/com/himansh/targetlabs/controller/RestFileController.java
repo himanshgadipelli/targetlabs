@@ -37,8 +37,9 @@ public class RestFileController {
             @RequestParam("uploadFile") MultipartFile[] uploadfile) {
 
         BasicFileAttributes attr = null;
+        Path pathRetrieve = null;
 
-        logger.debug("File uploaded!");
+
 
         String uploadedFileName = Arrays.stream(uploadfile).map(x -> x.getOriginalFilename())
                 .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(" , "));
@@ -49,7 +50,7 @@ public class RestFileController {
 
         try {
             saveUploadedFiles(Arrays.asList(uploadfile));
-            Path pathRetrieve = Paths.get(UPLOADED_FOLDER + uploadedFileName);
+            pathRetrieve = Paths.get(UPLOADED_FOLDER + uploadedFileName);
             attr = Files.readAttributes(pathRetrieve, BasicFileAttributes.class);
 
         } catch (IOException e) {
@@ -57,6 +58,7 @@ public class RestFileController {
         }
 
         return new ResponseEntity("Successfully uploaded - " + uploadedFileName
+                + "\tin " + UPLOADED_FOLDER
                 + "\tcreationTime: " + attr.creationTime().toString()
                 + "\tlastAccessTime: " + attr.lastAccessTime().toString()
                 + "\tlastModifiedTime: " + attr.lastModifiedTime().toString()
@@ -83,6 +85,7 @@ public class RestFileController {
             byte[] bytes = file.getBytes();
             Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
             Files.write(path, bytes);
+            logger.debug("File uploaded!");
         }
 
     }
