@@ -2,7 +2,9 @@
 
 This project implements a RESTful API spring-boot application. 
 This service saves the file in a target location and returns the meta-data.
-The file is saved in a different
+The file is saved in a different folder for validation(for future implementations).
+
+The upload file size is set to 1 MB. Can be set higher when using IntelliJ as IDE.
 
 
 
