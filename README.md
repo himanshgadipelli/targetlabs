@@ -9,7 +9,7 @@ The upload file size is set to 1 MB. Can be set higher when using IntelliJ as ID
 
 
 To upload a file via browser ping http://localhost:8080/
-Select the file you want to upload and click submit. On successful
+Select the file you want to upload and click submit.
 
 To upload a file via command line use the following command
 
