@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,6 +40,10 @@ public class RestFileController {
 
         BasicFileAttributes attr = null;
         Path pathRetrieve = null;
+        BufferedWriter bufferedWriter = null;
+        FileWriter fileWriter = null;
+        String metaData = null;
+        String nameWithoutExtension = null;
 
         String uploadedFileName = Arrays.stream(uploadFile).map(x -> x.getOriginalFilename())
                 .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(" , "));
@@ -50,7 +56,21 @@ public class RestFileController {
             saveUploadedFiles(Arrays.asList(uploadFile));
             pathRetrieve = Paths.get(UPLOADED_FOLDER + uploadedFileName);
             attr = Files.readAttributes(pathRetrieve, BasicFileAttributes.class);
-
+            nameWithoutExtension = uploadedFileName.substring(0, uploadedFileName.length() - 4);
+            fileWriter = new FileWriter(UPLOADED_FOLDER + nameWithoutExtension + "-retrieved_metadata.txt");
+            bufferedWriter = new BufferedWriter(fileWriter);
+            metaData = ("\nSuccessfully uploaded - " + uploadedFileName
+                    + "\tto " + UPLOADED_FOLDER
+                    + "\tcreationTime: " + attr.creationTime().toString()
+                    + "\tlastAccessTime: " + attr.lastAccessTime().toString()
+                    + "\tlastModifiedTime: " + attr.lastModifiedTime().toString()
+                    + "\tisDirectory: " + attr.isDirectory()
+                    + "\tisRegularFile: " + attr.isRegularFile()
+                    + "\tisSymbolicLink: " + attr.isSymbolicLink()
+                    + "\tsize: " + attr.size() + " Bytes").toString();
+            bufferedWriter.write(metaData);
+            bufferedWriter.close();
+            fileWriter.close();
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
